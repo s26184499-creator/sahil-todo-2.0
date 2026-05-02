@@ -1,0 +1,131 @@
+* {
+    margin: 0; /* Removes default spacing */
+    padding: 0; /* Removes default inner spacing */
+    box-sizing: border-box; 
+    font-family: Arial, sans-serif; 
+}
+body{
+    margin-top: 10px;
+}
+.logo{
+    max-width: 125px;
+    max-height: 125px;
+}
+.logo-title a{
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    
+}
+.navbar {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    background: #3d3c3c; 
+    padding: 1px 40px; 
+    color: white; 
+    position: relative;
+}
+.logo-title{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.navlinks{
+    list-style: none;  /*remove bullet*/
+    display: flex;
+    gap: 1.5rem;
+    
+}
+.navlinks a{
+    text-decoration: none; /*remove underline*/
+    color: white;
+    font-size: 25px;
+}
+.navlinks a:hover{
+    color: #868686;
+}
+.hamburger {
+    display: none; 
+    font-size: 28px;
+    cursor: pointer; 
+
+}
+#menu-toggle {
+    display: none; 
+    
+}
+section{
+    display:grid;
+    place-items: center;
+    padding: 200px;
+    background: url("images/herobackground.png") no-repeat center center/cover;
+    justify-content: center;
+    align-items: center;
+}
+section h1{
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+button{
+    
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 15px;
+    font-size: 1rem;
+    text-decoration:solid;
+    font-weight: 500;
+    background-color: orangered;
+}
+footer{
+    background: #3d3c3c;
+    padding: 30px;
+}
+h3{
+    text-align: center;
+    justify-content: center;
+}
+@media (max-width: 768px) {
+    .navlinks {
+        position: absolute; 
+        top: 70px; 
+        right: 0; 
+        background: #1e293b;
+        width: 200px;
+        flex-direction: column; 
+        align-items: center;
+        gap: 20px;
+        padding: 20px 0;
+        display: none; 
+    }
+    #menu-toggle:checked ~ .navlinks {
+        display: flex; 
+    }
+    .hamburger {
+        display: block; 
+    }
+section {
+padding: 250px 20px; 
+text-align: center;
+}
+
+section h1 {
+font-size: 20px; 
+}
+
+button {
+width: 80%; 
+font-size: 16px;
+padding: 12px;
+margin-left: 0; 
+}
+footer {
+padding: 20px;
+text-align: center;
+}
+footer h3 {
+font-size: 16px;
+}
+}
