@@ -6,12 +6,11 @@ exports.registerUser=async(req,res)=>{
         await newUser.save()
         res.status(201).json({
         message:"User registered successfully"
-   
         })
     } catch (error) {
         res.status(400).json({
             message:"Error registering user",
-            error
+            errorFF
         })
     }
 }
@@ -33,8 +32,8 @@ exports.loginUser=async(req,res)=>{
 
 
         res.status(200).json({
-        message:"User logged in successfully"
-   
+        message:"User logged in successfully",
+        name: user.name
         })
     } catch (error) {
         console.log(error)

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #333;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        /* Profile Section */
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-title">
+            <a href="index.html"><img class="logo" src="images/Logo.png"></a>
+            <a href="index.html">
+                <h1 class="title">Daily Action Plan</h1>
+            </a>
+        </div>
+
+
+        <input id="menu-toggle" type="checkbox">
+        <label for="menu-toggle" class="hamburger">
+            &#9776;
+        </label>
+
+        <div class="profile-menu" id="profileMenu" style="display:none">
+            <!-- <img id="navProfileImg" src="default-avatar.png" class="nav-profile-img" alt="Profile"> -->
+            <span id="profileName" onclick="toggleDropdown()">User ▾</span>
+
+            <div class="dropdown" id="dropdownMenu">
+                <a href="profile.html">Profile</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Content -->
+    <div class="container">
+        <img id="profileImg" src="default.png" alt="Profile">
+
+        <h2 id="username"></h2>
+
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            const profileMenu = document.getElementById("profileMenu");
+            const profileName = document.getElementById("profileName");
+            const navProfileImg = document.getElementById("navProfileImg");
+
+
+            const loginLink = document.querySelector('.navlinks a[href="login.html"]')?.parentElement;
+            const signupLink = document.querySelector('.navlinks a[href="register.html"]')?.parentElement;
+
+
+
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+
+            if (isLoggedIn) {
+
+
+
+                if (profileMenu) profileMenu.style.display = "flex";
+
+
+
+                const name = localStorage.getItem("name") || "User";
+                if (profileName) profileName.innerText = name + " ▾";
+
+
+
+                if (loginLink) loginLink.style.display = "none";
+                if (signupLink) signupLink.style.display = "none";
+
+
+
+                const savedImage = localStorage.getItem("profileImage");
+                if (navProfileImg) {
+                    navProfileImg.src = savedImage || "default-avatar.png";
+                }
+
+
+            } else {
+
+                if (profileMenu) profileMenu.style.display = "none";
+            }
+        });
+
+
+
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("name");
+            localStorage.removeItem("token");
+            window.location.reload();
+        }
+    </script>
+
+</body>
+
+</html>

@@ -30,7 +30,7 @@ app.use("/api", userRoutes);
 
 
 // Connect to MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/user")
+mongoose.connect("mongodb://127.0.0.1:27017/users")
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 

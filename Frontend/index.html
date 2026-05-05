@@ -1,109 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Action Plan</title>
     <link rel="stylesheet" href="style.css">
     <script>
-document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", () => {
 
 
-    const profileMenu = document.getElementById("profileMenu");
-    const profileName = document.getElementById("profileName");
-    const navProfileImg = document.getElementById("navProfileImg");
+            const profileMenu = document.getElementById("profileMenu");
+            const profileName = document.getElementById("profileName");
+            const navProfileImg = document.getElementById("navProfileImg");
 
 
-    const loginLink = document.querySelector('.navlinks a[href="login.html"]')?.parentElement;
-    const signupLink = document.querySelector('.navlinks a[href="register.html"]')?.parentElement;
+            const loginLink = document.querySelector('.navlinks a[href="login.html"]')?.parentElement;
+            const signupLink = document.querySelector('.navlinks a[href="register.html"]')?.parentElement;
 
 
-    
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
 
-    if (isLoggedIn) {
+            if (isLoggedIn) {
 
 
-       
-        if (profileMenu) profileMenu.style.display = "flex";
+
+                if (profileMenu) profileMenu.style.display = "flex";
 
 
-        
-        const name = localStorage.getItem("name") || "User";
-        if (profileName) profileName.innerText = name + " ▾";
+
+                const name = localStorage.getItem("name") || "User";
+                if (profileName) profileName.innerText = name + " ▾";
 
 
-     
-        if (loginLink) loginLink.style.display = "none";
-        if (signupLink) signupLink.style.display = "none";
+
+                if (loginLink) loginLink.style.display = "none";
+                if (signupLink) signupLink.style.display = "none";
 
 
-        
-        const savedImage = localStorage.getItem("profileImage");
-        if (navProfileImg) {
-            navProfileImg.src = savedImage || "default-avatar.png";
+
+                const savedImage = localStorage.getItem("profileImage");
+                if (navProfileImg) {
+                    navProfileImg.src = savedImage || "default-avatar.png";
+                }
+
+
+            } else {
+
+                if (profileMenu) profileMenu.style.display = "none";
+            }
+        });
+
+
+
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("name");
+            localStorage.removeItem("token");
+            window.location.reload();
         }
-
-
-    } else {
-        
-        if (profileMenu) profileMenu.style.display = "none";
-    }
-});
-
-
-
-function logout() {
-    // localStorage.removeItem("isLoggedIn");
-    // localStorage.removeItem("name");
-    // localStorage.removeItem("token");
-    window.location.reload();
-}
-</script>
+    </script>
 
 </head>
 
 
 
 <body>
-  <header>
-    
-    <nav class="navbar">
-        <div class="logo-title">
-            <a href="index.html"><img class="logo" src="images/Logo.png"></a>
-             <a href="index.html"><h1 class="title">Daily Action Plan</h1></a>
-        </div>
-    
+    <header>
 
-        <input id="menu-toggle" type="checkbox">
-        <label for="menu-toggle" class="hamburger">
-            &#9776;
-        </label>
+        <nav class="navbar">
+            <div class="logo-title">
+                <a href="index.html"><img class="logo" src="images/Logo.png"></a>
+                <a href="index.html">
+                    <h1 class="title">Daily Action Plan</h1>
+                </a>
+            </div>
 
 
-        <ul class="navlinks">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="register.html">Signup</a></li>
-            <li><a href="login.html">Login</a></li>
-        </ul>
-        <div class="profile-menu" id="profileMenu" style="display:none">
-        <img id="navProfileImg" src="default-avatar.png" class="nav-profile-img" alt="Profile">
-        <span id="profileName" onclick="toggleDropdown()">User ▾</span>
+            <input id="menu-toggle" type="checkbox">
+            <label for="menu-toggle" class="hamburger">
+                &#9776;
+            </label>
 
-        <div class="dropdown" id="dropdownMenu">
-          <a href="profile.html">Profile</a>
-          <a href="#" onclick="logout()">Logout</a>
-        </div>
-      </div>
-    </nav>
-</header>  
-<section>
-    <h1>Plan Less. Do More.<br>A simple way to track your tasks and focus on what truly matters.</h1>
-    <a href="todolist.html"><button>Try It Now!</button></a>
-</section>
-<footer>
-    <h3>copyright</h3>
-</footer>
+
+            <ul class="navlinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="register.html">Signup</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+            <div class="profile-menu" id="profileMenu" style="display:none">
+                <!-- <img id="navProfileImg" src="default-avatar.png" class="nav-profile-img" alt="Profile"> -->
+                <span id="profileName" onclick="toggleDropdown()">User ▾</span>
+
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="profile.html">Profile</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <h1>Plan Less. Do More.<br>A simple way to track your tasks and focus on what truly matters.</h1>
+        <a href="todolist.html"><button>Try It Now!</button></a>
+    </section>
+    <footer>
+        <h3>copyright</h3>
+    </footer>
 </body>
+
 </html>
