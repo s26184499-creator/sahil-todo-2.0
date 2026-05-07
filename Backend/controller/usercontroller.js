@@ -10,7 +10,7 @@ exports.registerUser=async(req,res)=>{
     } catch (error) {
         res.status(400).json({
             message:"Error registering user",
-            errorFF
+            error
         })
     }
 }

@@ -29,16 +29,61 @@
             margin-left: 15px;
         }
 
+        /* Navbar Profile Image */
+        .nav-profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
         /* Profile Section */
         .container {
             text-align: center;
             margin-top: 50px;
         }
 
-        img {
+        .profile-img-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        #profileImg {
             width: 120px;
             height: 120px;
             border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ddd;
+        }
+
+        .profile-img-wrapper:hover .img-overlay {
+            opacity: 1;
+        }
+
+        .img-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        #fileInput {
+            display: none;
         }
 
         button {
@@ -47,6 +92,95 @@
             color: white;
             border: none;
             cursor: pointer;
+        }
+
+        /* Tasks Section */
+        .tasks-section {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .tasks-section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .task-card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: left;
+            position: relative;
+        }
+
+        .task-card h4 {
+            margin: 0 0 8px 0;
+            color: #333;
+        }
+
+        .task-card p {
+            margin: 4px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 13px;
+            align-items: center;
+        }
+
+        .priority-high { color: #dc3545; font-weight: bold; }
+        .priority-medium { color: #fd7e14; font-weight: bold; }
+        .priority-low { color: #28a745; font-weight: bold; }
+
+        .status-completed { color: #28a745; }
+        .status-pending { color: #dc3545; }
+
+        .status-btn {
+            margin-left: auto;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .status-btn.pending {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-btn.pending:hover {
+            background: #218838;
+        }
+
+        .status-btn.completed {
+            background: #6c757d;
+            color: white;
+        }
+
+        .status-btn.completed:hover {
+            background: #5a6268;
+        }
+
+        .no-tasks {
+            text-align: center;
+            color: #888;
+            padding: 30px;
+        }
+
+        .no-tasks a {
+            color: #007bff;
+            text-decoration: none;
         }
     </style>
 
@@ -72,7 +206,7 @@
         </label>
 
         <div class="profile-menu" id="profileMenu" style="display:none">
-            <!-- <img id="navProfileImg" src="default-avatar.png" class="nav-profile-img" alt="Profile"> -->
+            <img id="navProfileImg" src="default-avatar.png" class="nav-profile-img" alt="Profile">
             <span id="profileName" onclick="toggleDropdown()">User ▾</span>
 
             <div class="dropdown" id="dropdownMenu">
@@ -84,11 +218,23 @@
 
     <!-- Profile Content -->
     <div class="container">
-        <img id="profileImg" src="default.png" alt="Profile">
+        <div class="profile-img-wrapper" onclick="document.getElementById('fileInput').click()">
+            <img id="profileImg" src="default.png" alt="Profile">
+            <div class="img-overlay">Change Photo</div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" onchange="handleImageUpload(event)">
 
         <h2 id="username"></h2>
 
         <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- User Tasks Section -->
+    <div class="tasks-section" id="tasksSection">
+        <h3>My Tasks</h3>
+        <div id="tasksList">
+            <p class="no-tasks">Loading tasks...</p>
+        </div>
     </div>
 
     <script>
@@ -98,6 +244,8 @@
             const profileMenu = document.getElementById("profileMenu");
             const profileName = document.getElementById("profileName");
             const navProfileImg = document.getElementById("navProfileImg");
+            const usernameDisplay = document.getElementById("username");
+            const profileImg = document.getElementById("profileImg");
 
 
             const loginLink = document.querySelector('.navlinks a[href="login.html"]')?.parentElement;
@@ -118,6 +266,7 @@
 
                 const name = localStorage.getItem("name") || "User";
                 if (profileName) profileName.innerText = name + " ▾";
+                if (usernameDisplay) usernameDisplay.innerText = name;
 
 
 
@@ -127,16 +276,119 @@
 
 
                 const savedImage = localStorage.getItem("profileImage");
-                if (navProfileImg) {
-                    navProfileImg.src = savedImage || "default-avatar.png";
+                if (savedImage) {
+                    if (navProfileImg) navProfileImg.src = savedImage;
+                    if (profileImg) profileImg.src = savedImage;
+                } else {
+                    if (navProfileImg) navProfileImg.src = "default-avatar.png";
+                    if (profileImg) profileImg.src = "default.png";
                 }
+
+                // Fetch and display user tasks
+                fetchTasks();
 
 
             } else {
 
                 if (profileMenu) profileMenu.style.display = "none";
+                document.getElementById("tasksList").innerHTML = '<p class="no-tasks">Please log in to view your tasks.</p>';
             }
         });
+
+
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith("image/")) {
+                alert("Please select an image file.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                localStorage.setItem("profileImage", base64Image);
+
+                const profileImg = document.getElementById("profileImg");
+                const navProfileImg = document.getElementById("navProfileImg");
+                if (profileImg) profileImg.src = base64Image;
+                if (navProfileImg) navProfileImg.src = base64Image;
+            };
+            reader.readAsDataURL(file);
+        }
+
+
+
+        async function fetchTasks() {
+            try {
+                const response = await fetch("http://localhost:5000/api/tasks");
+                const tasks = await response.json();
+
+                const tasksList = document.getElementById("tasksList");
+
+                if (!Array.isArray(tasks) || tasks.length === 0) {
+                    tasksList.innerHTML = '<p class="no-tasks">No tasks found. <a href="todolist.html">Add your first task!</a></p>';
+                    return;
+                }
+
+                tasksList.innerHTML = tasks.map(task => {
+                    const isCompleted = task.status === "Completed";
+                    const btnClass = isCompleted ? "completed" : "pending";
+                    const btnText = isCompleted ? "Mark Pending" : "Mark Completed";
+                    const nextStatus = isCompleted ? "Pending" : "Completed";
+
+                    return `
+                    <div class="task-card" data-id="${task._id}">
+                        <h4>${escapeHtml(task.title)}</h4>
+                        <p>${escapeHtml(task.description || "No description")}</p>
+                        <div class="task-meta">
+                            <span>📅 ${task.dueDate || "No due date"}</span>
+                            <span class="priority-${(task.priority || "low").toLowerCase()}">🔥 ${task.priority || "Low"}</span>
+                            <span class="status-${(task.status || "pending").toLowerCase()}">● ${task.status || "Pending"}</span>
+                            <button class="status-btn ${btnClass}" onclick="toggleStatus('${task._id}', '${nextStatus}')">${btnText}</button>
+                        </div>
+                    </div>
+                `}).join("");
+
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+                document.getElementById("tasksList").innerHTML = '<p class="no-tasks">Error loading tasks. Please try again later.</p>';
+            }
+        }
+
+        async function toggleStatus(taskId, newStatus) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        status: newStatus,
+                        completed: newStatus === "Completed"
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    fetchTasks(); // Refresh the list
+                } else {
+                    alert(result.message || "Failed to update status");
+                }
+            } catch (error) {
+                console.error("Error updating task:", error);
+                alert("Error updating task status");
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
 
 
@@ -144,6 +396,7 @@
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("name");
             localStorage.removeItem("token");
+            localStorage.removeItem("profileImage");
             window.location.reload();
         }
     </script>

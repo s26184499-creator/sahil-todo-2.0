@@ -10,6 +10,7 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 
 
 // Import routes
@@ -21,7 +22,7 @@ const userRoutes = require("./routes/userroute");
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(express.static("../Frontend"));
+app.use(express.static(path.join(__dirname, "..", "Frontend")));
 
 
 // Routes (AFTER app is created) 

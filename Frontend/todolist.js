@@ -1,4 +1,4 @@
-rm = document.getElementById("todoForm");
+const form = document.getElementById("todoForm");
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -24,9 +24,8 @@ form.addEventListener("submit", async (e) => {
         alert(result.message);
 
         if (response.ok) {
-            alert("task added!")
-            form.reset(); // clear form
-            
+            alert("task added!");
+            form.reset();
         }
 
     } catch (error) {
@@ -34,5 +33,3 @@ form.addEventListener("submit", async (e) => {
         alert("Error adding task");
     }
 });
-
-
